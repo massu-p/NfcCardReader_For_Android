@@ -1,6 +1,7 @@
 package jp.co.massu_p.nfccardreader.permission
 
 
+import android.content.DialogInterface
 import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,6 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.core.app.ActivityCompat
+import jp.co.massu_p.nfccardreader.R
+import jp.co.massu_p.nfccardreader.dialog.TextAlertDialog
 import jp.co.massu_p.nfccardreader.utils.PermissionUtils
 
 /**
@@ -24,8 +27,7 @@ class PermissionFragment : Fragment() {
 		inflater: LayoutInflater, container: ViewGroup?,
 		savedInstanceState: Bundle?
 	): View? {
-		// TODO 空のFragmentを生成したいんだ
-		return FrameLayout(activity).apply {}
+		return View(activity)
 	}
 
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,6 +39,8 @@ class PermissionFragment : Fragment() {
 				requestPermissions,
 				REQUEST_CODE_PERMISSION
 			)
+		} else {
+			requireFragmentManager().beginTransaction().remove(this).commit()
 		}
 	}
 
@@ -49,9 +53,21 @@ class PermissionFragment : Fragment() {
 			REQUEST_CODE_PERMISSION -> {
 				for (result in grantResults) {
 					if (result == PackageManager.PERMISSION_DENIED) {
-						// TODO 確認ダイアログ表示
+						val dialog = TextAlertDialog(requireContext())
+						dialog.title = getString(R.string.title_permission_denied)
+						dialog.message = getString(R.string.message_permission_denied)
+						dialog.onOkClickListener = DialogInterface.OnClickListener {_, _ ->
+							ActivityCompat.requestPermissions(
+								requireActivity(),
+								permissions,
+								REQUEST_CODE_PERMISSION
+							)
+						}
+						dialog.showDialog(requireFragmentManager())
 					}
+					return
 				}
+				requireFragmentManager().beginTransaction().remove(this).commit()
 			}
 		}
 	}

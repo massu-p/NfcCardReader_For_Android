@@ -50,7 +50,11 @@
 	<string name="return_description">return root</string>
 	<string name="fie_type_description">file type</string>
 
-	<!-- ダイアログ -->
+	<!-- ダイアログデフォルト値 -->
 	<string name="label_default_title">エラー</string>
 	<string name="label_default_message">エラーが発生しました</string>
+
+	<!-- 権限確認ダイアログ -->
+	<string name="title_permission_denied">権限が不足しています</string>
+	<string name="message_permission_denied">権限が不足しているため全ての機能を使用できません。¥n権限を有効にしてください。</string>
 </resources>
